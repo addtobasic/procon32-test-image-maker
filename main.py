@@ -1,28 +1,38 @@
 import numpy as np
 import cv2
+import os
 
 img = cv2.imread("testImage/procon_logo.png")
-size = 32
 
+wSplitNum = 2
+hSplitNum = 2
 
-v_size = img.shape[0] // size * size
-h_size = img.shape[1] // size * size
+# 分割後の横の長さのpx
+w_split_size = img.shape[0] // wSplitNum
+
+# 分割後の縦の長さのpx
+h_split_size = img.shape[1] // hSplitNum
+
+v_size = img.shape[0] // w_split_size * w_split_size
+h_size = img.shape[1] // h_split_size * h_split_size
+
 img = img[:v_size, :h_size]
-v_split = img.shape[0] // size
-h_split = img.shape[1] // size
-out_img = []
-[out_img.extend(np.hsplit(h_img, h_split))
-  for h_img in np.vsplit(img, v_split)]
 
-shuffle = np.random.permutation(range(len(img)))
-img = np.vstack((
-    # np.hstack(img[shuffle[0:5]]),
-    # np.hstack(img[shuffle[5:10]]),
-    # np.hstack(img[shuffle[10:15]]),
-))
+out_img = []
+[out_img.extend(np.hsplit(h_img, wSplitNum))
+  for h_img in np.vsplit(img, hSplitNum)]
+
+# shuffle = np.random.permutation(range(len(img)))
+# img = np.vstack((
+#     # np.hstack(img[shuffle[0:5]]),
+#     # np.hstack(img[shuffle[5:10]]),
+#     # np.hstack(img[shuffle[10:15]]),
+# ))
 
 # cv2.imwrite("./outImage/test.jpg",img)
 
+if not os.path.exists("./outImage"):
+  os.mkdir("./outImage")
 
 count = 0
 for outImage in out_img:
