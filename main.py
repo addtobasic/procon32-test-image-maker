@@ -8,8 +8,9 @@ img = cv2.imread("testImage/procon_logo.png")
 if not os.path.exists("./outImage"):
   os.mkdir("./outImage")
 
-wSplitNum = 3
-hSplitNum = 2
+wSplitNum, hSplitNum = input("分割数を入力: ").split()
+wSplitNum = int(wSplitNum)
+hSplitNum = int(hSplitNum)
 
 # 分割後の横の長さのpx
 w_split_size = img.shape[1] // wSplitNum
@@ -29,7 +30,7 @@ def splitImage(img, wsplitNum, hSplitNum):
   [split_img.extend(np.hsplit(h_img, wSplitNum)) for h_img in np.vsplit(img, hSplitNum)]
   count = 0
   for outImage in split_img:
-    cv2.imwrite("./outImage/img-"+str(count)+".jpg",split_img[count])
+    # cv2.imwrite("./outImage/img-"+str(count)+".jpg",split_img[count])
 
     split_img[count] = np.rot90(split_img[count],random.randint(0,3))
     cv2.imwrite("./outImage/img_rot"+str(count)+".jpg",split_img[count])
